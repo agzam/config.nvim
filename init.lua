@@ -15,6 +15,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 
 vim.opt.runtimepath:prepend(lazypath)
+vim.loader.enable()
 
 function recompile()
     local cwd = vim.fn.getcwd()
@@ -51,3 +52,6 @@ else
         { import = "plugins" }
     })
 end
+
+require("lazy").setup("plugins")
+require("config")
