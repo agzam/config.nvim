@@ -32,4 +32,6 @@
   (each [option value (pairs options)]
     (core.assoc vim.o option value)))
 
+(require :config.kitty)
+
 {}
