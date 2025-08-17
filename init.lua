@@ -53,7 +53,8 @@ else
       },
       { import = "plugins" }
                        })
+
+  require("config")
 end
 
-require("config")
 vim.loader.enable()
