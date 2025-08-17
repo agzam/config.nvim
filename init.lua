@@ -19,6 +19,22 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+function recompile()
+  -- Just delete and recompile without reloading
+  vim.fn.delete(vim.fn.stdpath("config") .. "/lua", "rf")
+  require('nfnl.api')['compile-all-files']()
+
+  require("lazy").sync()
+end
+vim.cmd("command! Recompile lua recompile()")
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+                              pattern = "*.fnl",
+                              callback = function()
+                                require('nfnl.api')['compile-all-files']()
+                              end
+})
+
 -- on first run, install lazy.nvim and compile plugins, otherwise just load plugins
 if (vim.fn.isdirectory(vim.fn.stdpath("config") .. "/lua/plugins") == 0) then
   require("lazy").setup({ { "Olical/nfnl" } })
@@ -38,23 +54,6 @@ else
       { import = "plugins" }
                        })
 end
-
-function recompile()
-  -- Just delete and recompile without reloading
-  vim.fn.delete(vim.fn.stdpath("config") .. "/lua", "rf")
-  require('nfnl.api')['compile-all-files']()
-
-  -- Restart Neovim instead of trying to reload
-  print("Compilation done. Please restart Neovim.")
-end
-vim.cmd("command! Recompile lua recompile()")
-
-vim.api.nvim_create_autocmd("BufWritePost", {
-                              pattern = "*.fnl",
-                              callback = function()
-                                require('nfnl.api')['compile-all-files']()
-                              end
-})
 
 require("config")
 vim.loader.enable()
