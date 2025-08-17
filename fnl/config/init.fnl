@@ -28,10 +28,12 @@
        ;; show line and column number
        :ruler true
        ;; makes signcolumn always one column with signs and linenumber
-       :signcolumn "number"}]
+       :signcolumn "number"
+       :timeoutlen 250}]
   (each [option value (pairs options)]
     (core.assoc vim.o option value)))
 
+;; (require :config.macros)
 (require :config.kitty)
 
 {}
