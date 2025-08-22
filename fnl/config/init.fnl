@@ -33,7 +33,8 @@
   (each [option value (pairs options)]
     (core.assoc vim.o option value)))
 
-;; (require :config.macros)
+(set vim.g.clipboard "osc52")
+
 (require :config.kitty)
 
 {}
