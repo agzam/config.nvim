@@ -22,17 +22,24 @@ vim.opt.rtp:prepend(lazypath)
 function recompile()
   -- Just delete and recompile without reloading
   vim.fn.delete(vim.fn.stdpath("config") .. "/lua", "rf")
+  -- Change to config directory before compiling
+  local original_cwd = vim.fn.getcwd()
+  vim.cmd("cd " .. vim.fn.stdpath("config"))
   require('nfnl.api')['compile-all-files']()
+  vim.cmd("cd " .. original_cwd)
 
   require("lazy").sync()
 end
 vim.cmd("command! Recompile lua recompile()")
 
 vim.api.nvim_create_autocmd("BufWritePost", {
-                              pattern = "*.fnl",
-                              callback = function()
-                                require('nfnl.api')['compile-all-files']()
-                              end
+  pattern = "*.fnl",
+  callback = function()
+    local original_cwd = vim.fn.getcwd()
+    vim.cmd("cd " .. vim.fn.stdpath("config"))
+    require('nfnl.api')['compile-all-files']()
+    vim.cmd("cd " .. original_cwd)
+  end
 })
 
 -- on first run, install lazy.nvim and compile plugins, otherwise just load plugins

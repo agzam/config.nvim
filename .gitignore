@@ -5,3 +5,4 @@ tmp/
 
 lazy-lock.json
 lua/
+flsproject.lua
