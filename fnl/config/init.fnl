@@ -29,12 +29,25 @@
        :ruler true
        ;; makes signcolumn always one column with signs and linenumber
        :signcolumn "number"
-       :timeoutlen 250}]
+       :timeoutlen 250
+       }]
   (each [option value (pairs options)]
     (core.assoc vim.o option value)))
 
 (set vim.g.clipboard "osc52")
 
+(let [defaults {:noremap true}
+      keys [[:t :<Esc> :<C-\><C-n> {:desc "Exit terminal mode"}
+             ;; :t "<localleader>," :<C-\><C-n> {:desc "Exit terminal mode"}
+             ;; C-c C-c like in Emacs Indirect buffers
+             :n :<c-c><c-c> :<cmd>wq<cr> {}
+             :n :<c-c><c-k> :<cmd>qa!<cr> {}]]]
+  (each [_ [m k cmd opts] (pairs keys)]
+    (vim.keymap.set
+     m k cmd
+     (vim.tbl_extend :force defaults opts))))
+
+;; (require :config.macros)
 (require :config.kitty)
 
 {}
